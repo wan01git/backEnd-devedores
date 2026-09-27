@@ -1,0 +1,40 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/controle_financeiro
+    username: controle_user
+    password: troque_esta_senha
+
+  jpa:
+    hibernate:
+      # validate = o Hibernate so confere se as entidades Java batem com as
+      # tabelas que o Flyway criou. Ele NUNCA cria/altera tabela sozinho.
+      # Toda mudanca de schema tem que passar por um novo arquivo Vx__.sql
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+server:
+  # ${PORT:8080}: em produção no Render, a plataforma injeta a variável de
+  # ambiente PORT com o valor que ela espera que sua aplicação escute; ela
+  # detecta a porta automaticamente, mas fixar isso explicitamente evita
+  # qualquer ambiguidade. Localmente, PORT não existe, então cai no padrão 8080.
+  port: ${PORT:8080}
+
+# Chave usada para assinar e validar os tokens JWT. PRECISA ser trocada por
+# um valor gerado por você (não use este placeholder em lugar nenhum real).
+# Gere uma com: openssl rand -base64 32
+app:
+  jwt:
+    secret: uUifnqn1OJOdeT58S9EaHOEKpSiCaIa/QrdogoKG9wQ=
+    expiracao-minutos: 120
+  cors:
+    # Em produção, sobrescreva via variável de ambiente APP_CORS_ALLOWED-ORIGINS
+    # (ou APP_CORS_ALLOWEDORIGINS, dependendo do shell) com a URL real do
+    # Cloudflare Pages, ex: https://controle-financeiro.pages.dev
+    allowed-origins: http://localhost:4200
